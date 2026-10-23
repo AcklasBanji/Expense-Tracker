@@ -58,7 +58,8 @@
                    </select>
                    <label for="date">Date</label>
                    <input type="date" id="date" required>
-                   <button type="submit">Add Transaction</button>
+                   <button type="submit" id="submit">Add Transaction</button>
+                   
                 </form>
             </section>
             <section id="transction-history">
@@ -69,9 +70,9 @@
                     <option value="income">Income Only</option>
                     <option value="expense">Expense Only</option>
                 </select>
-                <div id="transaction-list">
-                    <p id="empty-message">No transactions yet.</p>
-                </div>
+                <div id="empty-message">No transactions yet.</div>
+                <div id="transaction-list"></div>
+                
             </section>
        </main>
     </div>
