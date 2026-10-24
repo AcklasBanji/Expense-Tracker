@@ -163,6 +163,10 @@ function display(){
             submit.textContent = "Update transaction";
 
         });
+        transactionElement.classList.add("transaction-card");
+        editButton.classList.add("transaction-button", "transaction-edit");
+        delButton.classList.add("transaction-button", "transaction-delete");
+
         transactionElement.appendChild(decriptionElement);
         transactionElement.appendChild(amountElement);
         transactionElement.appendChild(typeElement);

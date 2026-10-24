@@ -1,81 +1,117 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Expense Tracker</title>
+    <title>Personal Expense Tracker</title>
     <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
 </head>
 <body>
     <div class="container">
+
         <header>
             <h1>Personal Expense Tracker</h1>
             <p>Take care of your money</p>
         </header>
-       <main>
+
+        <main>
             <section id="summary">
                 <h2>Financial Summary</h2>
-                <div id="summary-card">
-                    <h3>Total Income</h3>
-                    <p id="total-income">K0.00</p>
-                </div>
-                <div id="summary-card">
-                    <h3>Total Expense</h3>
-                    <p id="total-expense">K0.00</p>
-                </div>
-                <div id="summary-card">
-                    <h3>Balance</h3>
-                    <p id="balance">K0.00</p>
+
+                <div id="summary-container">
+                    <div class="summary-card">
+                        <h3>Total Income</h3>
+                        <p id="total-income">K0.00</p>
+                    </div>
+
+                    <div class="summary-card">
+                        <h3>Total Expenses</h3>
+                        <p id="total-expense">K0.00</p>
+                    </div>
+
+                    <div class="summary-card">
+                        <h3>Balance</h3>
+                        <p id="balance">K0.00</p>
+                    </div>
                 </div>
             </section>
 
+
             <section id="transaction-form-section">
                 <h2>Add Transaction</h2>
+
                 <form id="transaction-form">
                     <label for="description">Description</label>
-                    <input id="description" type="text" placeholder="e.g Lunch" required>
-                    
+                    <input
+                        class="inputStyle"
+                        id="description"
+                        type="text"
+                        placeholder="e.g. Lunch"
+                        required
+                    >
+
                     <label for="amount">Amount (K)</label>
-                    <input id="amount" type="number" placeholder="e.g K50"
-                    min="0.01"
-                    step="0.01"
-                    required>
-                    
+                    <input
+                        class="inputStyle"
+                        id="amount"
+                        type="number"
+                        placeholder="e.g. 50"
+                        min="0.01"
+                        step="0.01"
+                        required
+                    >
+
                     <label for="type">Transaction Type</label>
-                   <select id="type">
+                    <select class="inputStyle" id="type" required>
                         <option value="income">Income</option>
                         <option value="expense">Expense</option>
-                   </select>
+                    </select>
 
-                   <label for="category">Category</label>
-                   <select id="category">
+                    <label for="category">Category</label>
+                    <select class="inputStyle" id="category" required>
                         <option value="food">Food</option>
                         <option value="education">Education</option>
                         <option value="transport">Transport</option>
                         <option value="data">Data and Internet</option>
                         <option value="salary">Salary or Allowance</option>
                         <option value="other">Other</option>
-                   </select>
-                   <label for="date">Date</label>
-                   <input type="date" id="date" required>
-                   <button type="submit" id="submit">Add Transaction</button>
-                   
+                    </select>
+
+                    <label for="date">Date</label>
+                    <input
+                        class="inputStyle"
+                        type="date"
+                        id="date"
+                        required
+                    >
+
+                    <button type="submit" id="submit">
+                        Add Transaction
+                    </button>
                 </form>
             </section>
+
+        
             <section id="transction-history">
-                <h2>Transcation History</h2>
-                <label for="filter">Filter Transaction</label>
+                <h2>Transaction History</h2>
+
+                <label for="filter">Filter Transactions</label>
                 <select id="filter">
-                    <option value="all">All</option>
+                    <option value="all">All Transactions</option>
                     <option value="income">Income Only</option>
-                    <option value="expense">Expense Only</option>
+                    <option value="expense">Expenses Only</option>
                 </select>
-                <div id="empty-message">No transactions yet.</div>
+
+                <p id="empty-message">No transactions yet.</p>
+
                 <div id="transaction-list"></div>
-                
             </section>
-       </main>
+        </main>
+
     </div>
-    <script src="script.js"></script>
 </body>
 </html>
+
+
