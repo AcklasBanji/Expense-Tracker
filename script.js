@@ -12,10 +12,36 @@ const transacationList = document.getElementById("transaction-list");
 const emptyMessage = document.getElementById("empty-message");
 const form  = document.getElementById("transaction-form");
 
+
 display();
+summary();
 
+function summary(){
 
+    const incomeShow = document.getElementById("total-income");
+    const expenseShow = document.getElementById("total-expense");
+    const balanceShow = document.getElementById("balance");
+    
+    const totalIncome = dataBase.filter(trans =>
+    trans.transactionType === "income").reduce((t, trans) =>
+    t + trans.amount, 0);
 
+    const totalExpense = dataBase.filter(trans =>
+        trans.transactionType === "expense"
+    ).reduce((t, trans) => t + trans.amount, 0);
+    const balance = totalIncome - totalExpense;
+    incomeShow.textContent = `K${totalIncome.toFixed(2)}`
+    expenseShow.textContent = `K${totalExpense.toFixed(2)}`
+   
+    if(balance < 0){
+        balanceShow.textContent = `K${balance.toFixed(2)} - Over Budget!`
+    }else{
+        balanceShow.textContent = `K${balance.toFixed(2)}`
+    }
+
+    
+
+}
 
 form.addEventListener("submit", (event)=>{
     event.preventDefault();
@@ -25,6 +51,7 @@ form.addEventListener("submit", (event)=>{
     const transactionType = TransactionTypeInput.value;
     const category = categoryInput.value;
     const date = dateInput.value;
+
     if(description === "" || !Number.isFinite(amount)||amount <= 0 ||transactionType === "" || category === ""){
         alert("Enter Valid Informatioin in all the Fields");
         return;
@@ -45,6 +72,7 @@ form.addEventListener("submit", (event)=>{
         transactionToEdit.date = date;
         editingId = null;
         submit.textContent = "Add Transaction";
+        summary();
 
     }else{
         const transaction = {
@@ -56,32 +84,62 @@ form.addEventListener("submit", (event)=>{
             date
         }
         dataBase.push(transaction);
+        
     }
+    
     save();
     display();
+    summary();
     form.reset();
 
 })
+
+
 function display(){
+    
+    const sectionSelect = document.getElementById("filter");
+    const section = sectionSelect.value;
+
     transacationList.innerHTML = "";
-    if(dataBase === 0){
-        emptyMessage.textContent = "No transactions yet.";
+    if(dataBase.length === 0){
+        emptyMessage.textContent = "No Transactions yet"
         return;
-
     }
-    emptyMessage.textContent = "";
 
-    dataBase.forEach((trans) =>{
-        const p = document.createElement("p");
+    let filteredTransactions;
+    if(section === "income"){
+        filteredTransactions = dataBase.filter(s => s.transactionType === "income");
+    }else if(section === "expense"){
+        filteredTransactions = dataBase.filter(s => s.transactionType === "expense");
+
+    }else{
+        filteredTransactions = dataBase;
+    }
+    if(filteredTransactions.length === 0){
+        emptyMessage.textContent = "No Transactions match this filter";
+        return;
+    }
+    emptyMessage.textContent =  "";
+
+    filteredTransactions.forEach((trans) =>{
+        const transactionElement = document.createElement("div");
+        const decriptionElement = document.createElement("p");
+        decriptionElement.textContent = "Description: " + trans.description;
+
+        const amountElement = document.createElement("p");
+        amountElement.textContent = "Amount: K" + Number(trans.amount).toFixed(2);
+
+        const typeElement = document.createElement("p");
+        typeElement.textContent = "Type: " + trans.transactionType;
+        
+        const categoryElement = document.createElement("p");
+        categoryElement.textContent = "Category: " + trans.category;
+        
+        const dateElement = document.createElement("p");
+        dateElement.textContent = "Date: " + trans.date;
+    
         const delButton = document.createElement("button");
-        const editButton = document.createElement("button");
-        p.innerHTML = ` Description: ${trans.description}<br>
-        Amount in Kwacha: k${trans.amount}<br>
-        Type: ${trans.transactionType}<br>
-        Category: ${trans.category}<br>
-        Date: ${trans.date}
-        `;
-        delButton.textContent = "delete";
+        delButton.textContent = "Delete";
         delButton.addEventListener("click", ()=>{
             const index = dataBase.findIndex(s => s.id === trans.id);
             if(index !== -1){
@@ -89,7 +147,10 @@ function display(){
             }
             save();
             display();
+            summary();
         });
+
+        const editButton = document.createElement("button");
         editButton.textContent = "edit";
         editButton.addEventListener("click", ()=>{
             
@@ -102,13 +163,23 @@ function display(){
             submit.textContent = "Update transaction";
 
         });
-        p.append(delButton, editButton);
-        transacationList.appendChild(p);
+        transactionElement.appendChild(decriptionElement);
+        transactionElement.appendChild(amountElement);
+        transactionElement.appendChild(typeElement);
+        transactionElement.appendChild(categoryElement);
+        transactionElement.appendChild(dateElement);
+        transactionElement.appendChild(delButton);
+        transactionElement.appendChild(editButton);
+        transacationList.appendChild(transactionElement);
         save();
             
-        })
+        });
         
 }
+const filterInput = document.getElementById("filter");
+filterInput.addEventListener("change", ()=>{
+    display();
+})
 
 function save(){
     localStorage.setItem("transaction", JSON.stringify(dataBase));
